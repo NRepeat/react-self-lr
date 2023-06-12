@@ -1,23 +1,7 @@
 import React, { Component } from "react";
 import style from "./style.module.scss";
-
-const imgData = [
-  {
-    id: 0,
-    img: "https://hubblesite.org/files/live/sites/hubble/files/home/hubble-30th-anniversary/images/_images/hubble_30th_images/hubble-30th-saturn.jpg?t=tn2400",
-    alt: "hubble",
-  },
-  {
-    id: 1,
-    img: "https://hubblesite.org/files/live/sites/hubble/files/home/hubble-30th-anniversary/images/_images/hubble_30th_images/hubble-30th-milky-way-bulge.jpg?t=tn2400",
-    alt: "hubble",
-  },
-  {
-    id: 2,
-    img: "https://hubblesite.org/files/live/sites/hubble/files/home/hubble-30th-anniversary/images/_images/hubble_30th_images/hubble-30th-bubble-nebula.jpg?t=tn2400",
-    alt: "hubble",
-  },
-];
+import SliderImage from "./image";
+import imgData from "./imgData";
 
 export default class Slider extends Component {
   constructor(props) {
@@ -32,13 +16,61 @@ export default class Slider extends Component {
   }
 
   componentDidMount() {
-    this.intervalImg();
+    this.showImgNext();
   }
 
   componentWillUnmount() {
     this.stopSlideshow();
   }
 
+
+
+  intervalImg = () => {
+    const { delay } = this.state;
+    this.slideShow = setInterval(this.showImgNext, delay);
+  };
+
+  stopSlideshow = () => {
+    clearInterval(this.slideShow);
+  };
+  showImgNext = () => {
+    this.counterClickNext();
+    const { data } = this.state;
+    const { counter } = this.state;
+    const img = data[counter];
+    this.setState({
+      dedImg: (
+        <SliderImage
+          className={`${style.img} ${
+            this.state.showAnimation ? style.showAnimation : ""
+          }`}
+          onAnimationEnd={this.handleAnimationEnd}
+          key={img.id}
+          src={img.img}
+          alt={img.alt}
+        />
+      ),
+    });
+  };
+  showImgBack = () => {
+    this.counterClickBack();
+    const { data } = this.state;
+    const { counter } = this.state;
+    const img = data[counter];
+    this.setState({
+      dedImg: (
+        <SliderImage
+          className={`${style.img} ${
+            this.state.showAnimation ? style.showAnimation : ""
+          }`}
+          onAnimationEnd={this.handleAnimationEnd}
+          key={img.id}
+          src={img.img}
+          alt={img.alt}
+        />
+      ),
+    });
+  };
   counterClickNext = () => {
     if (this.state.counter >= this.state.data.length - 1) {
       this.setState({
@@ -62,56 +94,6 @@ export default class Slider extends Component {
       });
     }
   };
-
-  showImgNext = () => {
-    this.counterClickNext();
-    const { data } = this.state;
-    const { counter } = this.state;
-    const img = data[counter];
-    this.setState({
-      dedImg: (
-        <img
-          className={`${style.imgWrapper} ${
-            this.state.showAnimation ? style.showAnimation : ""
-          }`}
-          key={img.id}
-          src={img.img}
-          alt={img.alt}
-          onAnimationEnd={this.handleAnimationEnd}
-        />
-      ),
-    });
-  };
-
-  intervalImg = () => {
-    const { delay } = this.state;
-    this.slideShow = setInterval(this.showImgNext, delay);
-  };
-
-  stopSlideshow = () => {
-    clearInterval(this.slideShow);
-  };
-
-  showImgBack = () => {
-    this.counterClickBack();
-    const { data } = this.state;
-    const { counter } = this.state;
-    const img = data[counter];
-    this.setState({
-      dedImg: (
-        <img
-          className={`${style.imgWrapper} ${
-            this.state.showAnimation ? style.showAnimation : ""
-          }`}
-          key={img.id}
-          src={img.img}
-          alt={img.alt}
-          onAnimationEnd={this.handleAnimationEnd}
-        />
-      ),
-    });
-  };
-
   handleAnimationEnd = () => {
     this.setState({ showAnimation: false });
   };
@@ -140,20 +122,35 @@ export default class Slider extends Component {
     const { dedImg, delay } = this.state;
     return (
       <div>
-        {dedImg}
-        <div>
-          <form onSubmit={this.handleFormSubmit}>
-            <input
-              type="number"
-              value={delay}
-              onChange={this.handleDelayChange}
-            />
-            <button type="submit">Set Delay</button>
-            
-          </form>
-          <button onClick={this.stopSlideshow} >Stop slide show</button>
-          <button onClick={this.handleClickBack}>Назад</button>
-          <button onClick={this.handleClickNext}>Вперед</button>
+        <div className={style.sliderWrapper}>
+          {" "}
+          <div className={style.imgWrapper}>
+            {" "}
+            {dedImg}
+            <button
+              className={`${style.btn} ${style.left}`}
+              onClick={this.handleClickBack}
+            >
+              Назад
+            </button>
+            <button
+              className={`${style.btn} ${style.right}`}
+              onClick={this.handleClickNext}
+            >
+              Вперед
+            </button>
+          </div>
+          <button onClick={this.stopSlideshow}>Stop slide show</button>
+          <div>
+            <form onSubmit={this.handleFormSubmit}>
+              <input
+                type="number"
+                value={delay}
+                onChange={this.handleDelayChange}
+              />
+              <button type="submit">Set Delay</button>
+            </form>
+          </div>
         </div>
       </div>
     );
