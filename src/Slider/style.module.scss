@@ -1,20 +1,20 @@
 .imgWrapper {
     max-width: 500px;
 }
-/* style.module.scss */
+
 
   .showAnimation {
-    animation-name: fadeIn; /* Назва ключової анімації */
-    animation-duration: 1s; /* Тривалість анімації */
+    animation-name: fadeIn; 
+    animation-duration: 1s; 
   }
   
   @keyframes fadeIn {
     0% {
-      opacity: 0.5; /* Початкова прозорість */
-       /* Початковий масштаб */
+      opacity: 0.5; 
+      
     }
     100% {
-      opacity: 1; /* Кінцева прозорість */
+      opacity: 1; 
     }
   }
   

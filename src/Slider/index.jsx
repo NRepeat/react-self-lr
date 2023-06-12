@@ -149,7 +149,9 @@ export default class Slider extends Component {
               onChange={this.handleDelayChange}
             />
             <button type="submit">Set Delay</button>
+            
           </form>
+          <button onClick={this.stopSlideshow} >Stop slide show</button>
           <button onClick={this.handleClickBack}>Назад</button>
           <button onClick={this.handleClickNext}>Вперед</button>
         </div>
