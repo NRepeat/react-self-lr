@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Slider from "./Slider";
-import FelxContainer from "./components/FlexsContainer";
 
 
 

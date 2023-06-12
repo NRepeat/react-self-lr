@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import style from "./style.module.scss";
 import SliderImage from "./image";
 import imgData from "./imgData";
+import classNames from "classnames";
+import Caption from "./caption";
 
 export default class Slider extends Component {
   constructor(props) {
@@ -23,11 +25,9 @@ export default class Slider extends Component {
     this.stopSlideshow();
   }
 
-
-
   intervalImg = () => {
     const { delay } = this.state;
-    this.slideShow = setInterval(this.showImgNext, delay);
+    this.slideShow = setInterval(this.handleClickNext, delay);
   };
 
   stopSlideshow = () => {
@@ -35,39 +35,42 @@ export default class Slider extends Component {
   };
   showImgNext = () => {
     this.counterClickNext();
-    const { data } = this.state;
-    const { counter } = this.state;
+    const { data, counter } = this.state;
     const img = data[counter];
     this.setState({
       dedImg: (
-        <SliderImage
-          className={`${style.img} ${
-            this.state.showAnimation ? style.showAnimation : ""
-          }`}
-          onAnimationEnd={this.handleAnimationEnd}
-          key={img.id}
-          src={img.img}
-          alt={img.alt}
-        />
+        <>
+          {" "}
+          <SliderImage
+            className={classNames(style.showAnimation, style.img)}
+            onAnimationEnd={this.handleAnimationEnd}
+            key={img.id}
+            src={img.img}
+            alt={img.alt}
+          />
+          <Caption caption={img.caption} name={img.name} />
+        </>
       ),
     });
   };
   showImgBack = () => {
     this.counterClickBack();
-    const { data } = this.state;
-    const { counter } = this.state;
+
+    const { data, counter } = this.state;
     const img = data[counter];
     this.setState({
       dedImg: (
-        <SliderImage
-          className={`${style.img} ${
-            this.state.showAnimation ? style.showAnimation : ""
-          }`}
-          onAnimationEnd={this.handleAnimationEnd}
-          key={img.id}
-          src={img.img}
-          alt={img.alt}
-        />
+        <section>
+          {" "}
+          <SliderImage
+            className={classNames([style.showAnimation], style.img)}
+            onAnimationEnd={this.handleAnimationEnd}
+            key={img.id}
+            src={img.img}
+            alt={img.alt}
+          />
+          <Caption caption={img.caption} name={img.name} />
+        </section>
       ),
     });
   };
@@ -121,11 +124,9 @@ export default class Slider extends Component {
   render() {
     const { dedImg, delay } = this.state;
     return (
-      <div>
+      <>
         <div className={style.sliderWrapper}>
-          {" "}
           <div className={style.imgWrapper}>
-            {" "}
             {dedImg}
             <button
               className={`${style.btn} ${style.left}`}
@@ -139,9 +140,6 @@ export default class Slider extends Component {
             >
               Вперед
             </button>
-          </div>
-          <button onClick={this.stopSlideshow}>Stop slide show</button>
-          <div>
             <form onSubmit={this.handleFormSubmit}>
               <input
                 type="number"
@@ -150,9 +148,11 @@ export default class Slider extends Component {
               />
               <button type="submit">Set Delay</button>
             </form>
+
+            <button onClick={this.stopSlideshow}>Stop slide show</button>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
